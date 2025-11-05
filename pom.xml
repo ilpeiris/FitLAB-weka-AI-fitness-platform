@@ -52,8 +52,14 @@
 </dependency>
 
 
+<dependency>
+    <groupId>org.mindrot</groupId>
+    <artifactId>jbcrypt</artifactId>
+    <version>0.4</version>
+</dependency>
 
-<!--added dependencies for servlet and JSP-->
+
+<!--added dependencies for servlet and JSP & later others-->
 
 
 
