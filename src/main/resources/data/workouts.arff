@@ -1,0 +1,39 @@
+% 1. Title: FitLife Workout Dataset
+%
+% 2. Sources:
+%    - Generated from assignment brief [cite: 188]
+%    - Manually added examples
+%
+@RELATION workouts
+
+% --- Define the "columns" (Attributes) ---
+@ATTRIBUTE duration_mins     NUMERIC
+@ATTRIBUTE distance_km       NUMERIC
+@ATTRIBUTE calories_burned   NUMERIC
+
+% --- Define the "answer" (The Class) ---
+@ATTRIBUTE activity_type     {Running,Cycling,Walking,'Gym Workout'}
+
+% --- The actual data examples ---
+@DATA
+% Duration, Distance, Calories, Activity
+30,5.2,320,Running
+45,15.0,450,Cycling
+60,4.0,200,Walking
+50,0,380,'Gym Workout'
+20,3.2,220,Running
+70,20.0,650,Cycling
+40,3.0,150,Walking
+30,0,250,'Gym Workout'
+25,4.0,260,Running
+50,16.0,500,Cycling
+90,6.0,300,Walking
+60,0,400,'Gym Workout'
+35,6.0,380,Running
+80,25.0,750,Cycling
+20,1.5,80,Walking
+45,0,310,'Gym Workout'
+22,3.5,240,Running
+60,18.0,600,Cycling
+30,2.0,100,Walking
+55,0,350,'Gym Workout'
