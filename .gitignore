@@ -1,0 +1,2 @@
+# Ignore the Maven build output folder
+/target/
