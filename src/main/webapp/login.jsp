@@ -7,40 +7,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FitLife Login</title>
-
     <link rel="stylesheet" href="css/style.css">
-    </head>
+</head>
 <body>
 
-    <h2>Login to FitLife</h2>
+    <div class="form-container">
+        <h2>Login to FitLife</h2>
 
-    <form action="login" method="POST">
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <div>
-            <button type="submit">Login</button>
-        </div>
-    </form>
+        <c:if test="${not empty error}">
+            <div class="error-message">${error}</div>
+        </c:if>
+        <c:if test="${not empty success}">
+            <div class="success-message">Registration successful! Please login.</div>
+        </c:if>
 
-    <hr>
-
-    <c:if test="${not empty error}">
-        <p style="color: red;">${error}</p>
-    </c:if>
-
-    <c:if test="${not empty success}">
-        <p style="color: green;">Registration successful! Please login.</p>
-    </c:if>
-
-    <p>
-        Don't have an account? <a href="register.jsp">Register Here</a>
-    </p>
+        <form action="login" method="POST">
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div>
+                <button type="submit" class="btn">Login</button>
+            </div>
+        </form>
+        <hr style="margin-top: 1.5rem; border: 0; border-top: 1px solid #eee;">
+        <p style="text-align: center; margin-top: 1rem;">
+            Don't have an account? <a href="register.jsp">Register Here</a>
+        </p>
+    </div>
 
 </body>
 </html>
