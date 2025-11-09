@@ -58,3 +58,22 @@
 60,20.0,620,Cycling
 30,2.5,120,Walking
 55,0,330,'Gym Workout'
+% --- Added these 18 new rows ---
+45,6.5,420,Running
+25,4.0,280,Running
+35,5.5,360,Running
+40,6.0,400,Running
+30,5.0,330,Running
+50,18.0,510,Cycling
+60,22.0,600,Cycling
+40,14.0,430,Cycling
+55,20.0,550,Cycling
+45,17.0,480,Cycling
+65,4.5,220,Walking
+70,5.0,240,Walking
+55,4.0,190,Walking
+60,4.2,210,Walking
+75,5.5,260,Walking
+45,0,310,'Gym Workout'
+60,0,400,'Gym Workout'
+50,0,340,'Gym Workout'
