@@ -115,8 +115,8 @@
                     <option value="Gym Workout">Gym Workout</option>
                 </select>
 
-                <label for="date">Filter by Date:</label>
-                <input type="date" id="date" name="date">
+                <label for="filterdate">Filter by Date:</label>
+                <input type="date" id="filterdate" name="date">
 
                 <button type="submit" class="btn" style="width: auto;">Filter</button>
             </form>
