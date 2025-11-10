@@ -29,39 +29,41 @@
         <h1 style="color:white">Manage Workouts</h1>
 
        <c:if test="${not empty sessionScope.aiPrediction}">
-    <div class="analysis-box">
-        <h3> Workout Saved!</h3>
+            
+            <c:set var="boxClass" value="${sessionScope.aiPrediction == sessionScope.userSelection ? 'success' : 'warning'}" />
+            <div class="analysis-box ${boxClass}">
 
-        <div class="analysis-grid">
-            <div class="analysis-item">
-                <span class="analysis-item-title">Your Input:</span>
-                <span class="analysis-item-data user">${sessionScope.userSelection}</span>
+                <h3>Workout Saved!</h3>
+        
+                <div class="analysis-grid">
+                    <div class="analysis-item">
+                        <span class="analysis-item-title">Your Input:</span>
+                        <span class="analysis-item-data user">${sessionScope.userSelection}</span>
+                    </div>
+        
+                    <div class="analysis-item">
+                        <span class="analysis-item-title">AI Suggestion:</span>
+                        <span class="analysis-item-data ai">${sessionScope.aiPrediction}</span>
+                    </div>
+                </div>
+        
+                <c:choose>
+                    <c:when test="${boxClass == 'success'}">
+                        <p class="analysis-result-message">
+                            AI Suggestion matches your activity type.
+                        </p>
+                    </c:when>
+                    <c:otherwise>
+                        <p class="analysis-result-message">
+                            AI Suggestion differs from your activity.
+                        </p>
+                    </c:otherwise>
+                </c:choose>
             </div>
-
-            <div class="analysis-item">
-                <span class="analysis-item-title">AI Suggestion:</span>
-                <span class="analysis-item-data ai">${sessionScope.aiPrediction}</span>
-            </div>
-        </div>
-
-        <c:choose>
-            <c:when test="${sessionScope.aiPrediction == sessionScope.userSelection}">
-                <p style="text-align: center; margin-top: 1rem; font-weight: 600; color: #2ada53;">
-                    AI result matches your activity type.
-                </p>
-            </c:when>
-            <c:otherwise>
-                <p style="text-align: center; margin-top: 1rem; font-weight: 600; color: #e2ae11;">
-                    AI result differs from your activity.
-                </p>
-            </c:otherwise>
-        </c:choose>
-    </div>
-
-
-    <c:remove var="aiPrediction" scope="session" />
-    <c:remove var="userSelection" scope="session" />
-</c:if>
+        
+            <c:remove var="aiPrediction" scope="session" />
+            <c:remove var="userSelection" scope="session" />
+        </c:if>
 
 
 
@@ -70,14 +72,7 @@
     <h2>Add New Workout</h2>
     <form action="workouts" method="POST">
 
-        <label>Activity Type:</label>
-<select name="activityType" required>
-    <option value="Running">Running</option>
-    <option value="Cycling">Cycling</option>
-    <option value="Walking">Walking</option>
-    <option value="Gym Workout">Gym Workout</option>
-</select>
-
+   
         <label>Duration (mins):</label>
         <input type="number" name="durationMins" id="duration" min="1" required>
 
@@ -87,9 +82,25 @@
         <label>Calories Burned:</label>
         <input type="number" name="caloriesBurned" id="calories" min="1" required>
 
-        <div style="margin-top: 10px; height: 20px;">
-            <strong id="ai-suggestion" style="color: #007bff; font-size: 0.9rem;"></strong>
+    
+     
+
+  <div style="margin-top: 10px; min-height: 20px; text-align: center;">
+            <strong id="ai-suggestion"></strong>
         </div>
+
+<label>Choose Activity Type</label>
+
+
+
+<select name="activityType" required>
+    <option value="Running">Running</option>
+    <option value="Cycling">Cycling</option>
+    <option value="Walking">Walking</option>
+    <option value="Gym Workout">Gym Workout</option>
+</select>
+
+
 
         <label>Date:</label>
         <input type="date" name="workoutDate" required>
@@ -162,74 +173,55 @@
 
 
 <script>
-    // new, important part:
-    // This function will ONLY run after the entire HTML page is loaded and ready.
     document.addEventListener("DOMContentLoaded", function() {
 
-        // Get references to the input fields
-        const durationInput = document.getElementById('duration');
-        const distanceInput = document.getElementById('distance');
-        const caloriesInput = document.getElementById('calories');
+        const durationInput = document.querySelector('input[name="durationMins"]');
+        const distanceInput = document.querySelector('input[name="distanceKm"]');
+        const caloriesInput = document.querySelector('input[name="caloriesBurned"]');
         const suggestionSpan = document.getElementById('ai-suggestion');
 
-        // This function wil run API call
         async function fetchPrediction() {
-            // Get current values
             const duration = durationInput.value;
             const distance = distanceInput.value;
             const calories = caloriesInput.value;
 
-            console.log('fetchPrediction called - Duration:', duration, 'Distance:', distance, 'Calories:', calories);
+            // --- Function to manage CSS classes ---
+            function setSuggestion(text, className) {
+                suggestionSpan.innerText = text;
+                suggestionSpan.className = className; // Replaces all classes
+            }
 
-            // Only fetch if all three fields have a value (and are not empty strings)
-            if (duration !== '' && distance !== '' && calories !== '') {
-                const durationNum = parseFloat(duration);
-                const distanceNum = parseFloat(distance);
-                const caloriesNum = parseFloat(calories);
-
-                console.log('Parsed numbers - durationNum:', durationNum, 'distanceNum:', distanceNum, 'caloriesNum:', caloriesNum);
-                console.log('Type check - durationNum:', typeof durationNum, 'distanceNum:', typeof distanceNum, 'caloriesNum:', typeof caloriesNum);
-
-                // Validate that they are valid numbers
-                if (!isNaN(durationNum) && durationNum > 0 && !isNaN(distanceNum) && distanceNum >= 0 && !isNaN(caloriesNum) && caloriesNum > 0) {
-                    suggestionSpan.innerText = "AI is thinking...";
+            if (duration && duration > 0 && distance && distance >= 0 && calories && calories > 0) {
+                setSuggestion("AI is thinking...", "thinking");
+                
+                try {
+                    const durationNum = parseFloat(duration);
+                    const distanceNum = parseFloat(distance);
+                    const caloriesNum = parseFloat(calories);
                     
-                    try {
-                        // Build the URL for  new API - using string concatenation for safety
-                        const url = 'api/predict?duration=' + durationNum + '&distance=' + distanceNum + '&calories=' + caloriesNum;
-                        console.log('Fetching URL:', url);
-                        console.log('URL constructed with values:', durationNum, distanceNum, caloriesNum);
-                        
-                        const response = await fetch(url);
-                        const data = await response.json();
+                    const url = 'api/predict?duration=' + durationNum + '&distance=' + distanceNum + '&calories=' + caloriesNum;
+                    
+                    const response = await fetch(url);
+                    const data = await response.json();
 
-                        if (response.ok && data.prediction) {
-                            suggestionSpan.style.color = "#007bff"; // Blue
-                            suggestionSpan.innerText = "AI Suggestion: " + data.prediction;
-                        } else {
-                            suggestionSpan.style.color = "#dc3545"; // Red
-                            suggestionSpan.innerText = "Could not predict.";
-                        }
-                    } catch (error) {
-                        console.error('Error fetching prediction:', error);
-                        suggestionSpan.style.color = "#dc3545"; // Red
-                        suggestionSpan.innerText = "Error contacting AI.";
+                    if (response.ok && data.prediction) {
+                        setSuggestion("AI Suggestion: " + data.prediction, "success");
+                    } else {
+                        setSuggestion("Could not predict.", "error");
                     }
-                } else {
-                    console.log('Validation failed - not all fields have valid positive numbers');
-                    suggestionSpan.innerText = ""; // Clear suggestion if validation fails
+                } catch (error) {
+                    console.error('Error fetching prediction:', error);
+                    setSuggestion("Error contacting AI.", "error");
                 }
             } else {
-                console.log('One or more fields are empty');
-                suggestionSpan.innerText = ""; // Clear suggestion if fields are empty
+                setSuggestion("", ""); // Clear text and all classes
             }
         }
 
-        // Add event listeners to run the function whenever the user stops typing
+        // Add event listeners
         durationInput.addEventListener('input', fetchPrediction);
         distanceInput.addEventListener('input', fetchPrediction);
         caloriesInput.addEventListener('input', fetchPrediction);
-
     }); 
 </script>
 

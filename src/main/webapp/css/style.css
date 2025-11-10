@@ -183,69 +183,144 @@ table td a:hover {
     margin-bottom: 1.5rem;
 }
 
-/* AI Analysis Box NEW  */
-.analysis-box {
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-    padding: 1.5rem;
-    max-width: 1000px;
-    margin-left: auto; 
-    margin-right: auto;
-    box-sizing: border-box; 
+
+
+/* --- Modern AI Real-time Suggestion --- */
+#ai-suggestion {
+    display: inline-block; /* Allows padding and margin */
+    padding: 5px 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 20px; /* Modern "pill" shape */
+    margin-top: 5px;
+    
+    /* Smooth transitions for appearing/changing */
+    transition: all 0.3s ease;
+    border: 1px solid transparent; /* Placeholder for border */
 }
 
+/* When the span is empty, it has no size and is invisible */
+#ai-suggestion:empty {
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    border: none;
+}
+
+/* State: Thinking */
+#ai-suggestion.thinking {
+    background-color: #f0f0f0;
+    color: #555;
+    border-color: #ddd;
+    opacity: 1;
+}
+
+/* State: Success */
+#ai-suggestion.success {
+    background-color: #e6f7ff; /* Light blue */
+    color: #0056b3; /* Dark blue */
+    border-color: #b3d7ff;
+    opacity: 1;
+}
+
+/* State: Error */
+#ai-suggestion.error {
+    background-color: #fbeae8; /* Light red */
+    color: #e74c3c; /* Dark red */
+    border-color: #e74c3c;
+    opacity: 1;
+}
+/* --- NEW Futuristic "Workout Saved" Box (Glassmorphism) --- */
+
+
+
+.analysis-box {
+    /* The "frosted glass" effect */
+    background: rgba(0, 0, 0, 0.425); /* Semi-transparent white */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* For Safari */
+    
+    /* Structure */
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    text-align: center;
+    transition: all 0.3s ease;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    /* Base border - will be overridden by status */
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+}
+
+/* State: Success (Green) */
+.analysis-box.success {
+    /* Change border to bright green */
+    border-color: #2ada53;
+}
+
+/* State: Warning/Mismatch (Yellow) */
+.analysis-box.warning {
+    /* Change border to bright yellow */
+    border-color: #000000;
+}
+
+/* --- Text Styles for Readability on Glass (High Contrast) --- */
 .analysis-box h3 {
     margin-top: 0;
-    color: #2c3e50;
+    font-size: 1.5rem;
+    color: #ffffff; /* Dark Charcoal/Blue */
 }
 
 .analysis-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
 }
 
 .analysis-item {
-    background-color: #ffffff;
-    border: 1px solid #eee;
-    padding: 1rem;
-    border-radius: 6px;
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: center;
 }
 
 .analysis-item-title {
+    font-size: 1rem;
     font-weight: 600;
-    color: #555;
-    display: block;
-    margin-bottom: 0.5rem;
+    color: #ffffff; /* Dark Gray */
+    margin-bottom: 0.25rem;
 }
 
 .analysis-item-data {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 700;
 }
 
-.analysis-item-data.user {
-    color: #3498db; 
+/* These colors are high-contrast and look good */
+.analysis-item-data.user { color: #4efff8; }
+.analysis-item-data.ai { color: #c027ff; }
+
+
+/* Style the main result message */
+.analysis-result-message {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
 }
 
-.analysis-item-data.ai {
-    color: #9b59b6; 
+/* Use specific dark colors for the result message */
+.analysis-box.success .analysis-result-message {
+    color: #75ffae; /* Dark Green */
 }
 
-
-
-
-/* --- Success & Secondary Buttons --- */
-.success-message {
-    color: #155724;
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    padding: 0.8rem;
-    border-radius: 6px;
-    margin-bottom: 1rem;
+.analysis-box.warning .analysis-result-message {
+    color: #f6ff7ff0; /* Dark Yellow/Brown */
 }
 
 .btn-secondary {
