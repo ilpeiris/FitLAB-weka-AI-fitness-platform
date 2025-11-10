@@ -66,12 +66,17 @@
 
 
 
-<div class.="form-container" style="margin-top: 2rem;max-width: 1000px;">
+<div class="form-container" style="margin-top: 2rem;max-width: 1000px;">
     <h2>Add New Workout</h2>
     <form action="workouts" method="POST">
+
         <label>Activity Type:</label>
-        <select name="activityType" required>
-            </select>
+<select name="activityType" required>
+    <option value="Running">Running</option>
+    <option value="Cycling">Cycling</option>
+    <option value="Walking">Walking</option>
+    <option value="Gym Workout">Gym Workout</option>
+</select>
 
         <label>Duration (mins):</label>
         <input type="number" name="durationMins" id="duration" min="1" required>
