@@ -35,18 +35,25 @@ public class PredictionResource {
                                .build();
             }
 
-            // ---  same logic from  WorkoutServlet ---
-            DenseInstance newInstance = new DenseInstance(dataHeader.numAttributes());
+        
+            double[] values = new double[dataHeader.numAttributes()];
+
+        
+            values[dataHeader.attribute("duration_mins").index()] = duration;
+            values[dataHeader.attribute("distance_km").index()] = distance;
+            values[dataHeader.attribute("calories_burned").index()] = calories;
+            
+         
+            values[dataHeader.classIndex()] = weka.core.Utils.missingValue();
+
+            DenseInstance newInstance = new DenseInstance(1.0, values);
+         
             newInstance.setDataset(dataHeader);
-            newInstance.setValue(dataHeader.attribute("duration_mins"), duration);
-            newInstance.setValue(dataHeader.attribute("distance_km"), distance);
-            newInstance.setValue(dataHeader.attribute("calories_burned"), calories);
 
             double predictionIndex = aiModel.classifyInstance(newInstance);
             String predictedActivity = dataHeader.classAttribute().value((int) predictionIndex);
-            // ----------------------------------------------------
-
-            // Return the prediction as a simple JSON string
+            
+            
             String jsonResponse = "{\"prediction\": \"" + predictedActivity + "\"}";
             return Response.ok(jsonResponse).build();
 
