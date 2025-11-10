@@ -5,7 +5,7 @@ import com.fitlife.User;
 import com.fitlife.Workout;
 import com.fitlife.dao.WorkoutDAO;
 
-
+import com.fitlife.MLModelManager; // <-- Imported the new manager
 
 // Import WEKA classes for AI model integration
 import weka.classifiers.Classifier;
@@ -36,12 +36,6 @@ public class WorkoutServlet extends HttpServlet {
 
     private WorkoutDAO workoutDAO;
 
-// --- AI Model Variables ---
-private Classifier aiModel;
-private Instances dataHeader;
-// -------------------------
-
-
 
 
 @Override
@@ -52,53 +46,8 @@ private Instances dataHeader;
         workoutDAO = new WorkoutDAO();
         System.out.println("WorkoutDAO initialized."); 
 
-        // load the WEKA AI model 
-        try {
-            // Get the real path to the model file inside WEB-INF
-            ServletContext context = config.getServletContext();
-            String modelPath = context.getRealPath("/WEB-INF/activity_model.model");
-
-            if (modelPath == null) {
-                throw new ServletException("Could not find model file. Make sure 'activity_model.model' is in /WEB-INF/");
-            }
-
-            System.out.println("Loading AI model from: " + modelPath);
-            aiModel = (Classifier) SerializationHelper.read(modelPath);
-            System.out.println("AI Model loaded successfully.");
-
-    
-   
-            Attribute duration = new Attribute("duration_mins");
-            Attribute distance = new Attribute("distance_km");
-            Attribute calories = new Attribute("calories_burned");
-
-    
-            ArrayList<String> classValues = new ArrayList<>();
-            classValues.add("Running");
-            classValues.add("Cycling");
-            classValues.add("Walking");
-            classValues.add("Gym Workout");
-            Attribute activityClass = new Attribute("activity_type", classValues);
-
-           
-            ArrayList<Attribute> attributes = new ArrayList<>();
-            attributes.add(duration);
-            attributes.add(distance);
-            attributes.add(calories);
-            attributes.add(activityClass); // Add the class attribute last
-
-     
-            dataHeader = new Instances("PredictionInstance", attributes, 0);
-            
-     
-            dataHeader.setClassIndex(dataHeader.numAttributes() - 1);
-
-            System.out.println("WEKA data header created successfully.");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ServletException("CRITICAL ERROR: Could not load WEKA model.", e);
-        }
+        // removed the WEKA AI model 
+      
     }
 
 
@@ -167,39 +116,37 @@ private Instances dataHeader;
         String workoutDate = request.getParameter("workoutDate");
         String notes = request.getParameter("notes");
 
-        //AI PREDICTION STEP (later) ---
-        String aiPrediction = "AI prediction could not be run."; 
-        if (aiModel != null) {
-            try {
-               
-                DenseInstance newInstance = new DenseInstance(dataHeader.numAttributes());
-                
-               
-                newInstance.setDataset(dataHeader); 
 
-                
+
+
+// ---  UPDATED AI PREDICTION STEP ---
+        String aiPrediction = "AI prediction could not be run."; 
+        try {
+            // Get the model and header from our static manager
+            Classifier aiModel = MLModelManager.getAiModel();
+            Instances dataHeader = MLModelManager.getDataHeader();
+
+            if (aiModel != null) {
+                DenseInstance newInstance = new DenseInstance(dataHeader.numAttributes());
+                newInstance.setDataset(dataHeader); 
                 newInstance.setValue(dataHeader.attribute("duration_mins"), durationMins);
                 newInstance.setValue(dataHeader.attribute("distance_km"), distanceKm);
                 newInstance.setValue(dataHeader.attribute("calories_burned"), caloriesBurned);
                
-
                 double predictionIndex = aiModel.classifyInstance(newInstance);
-
-                
                 aiPrediction = dataHeader.classAttribute().value((int) predictionIndex);
                 
-                System.out.println("--- AI PREDICTION SUCCESS ---");
-                System.out.println("Input: " + durationMins + "min, " + distanceKm + "km, " + caloriesBurned + "kcal");
+                System.out.println("--- AI PREDICTION SUCCESS (from Servlet) ---");
                 System.out.println("Predicted Activity: " + aiPrediction);
-                System.out.println("-----------------------------");
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                aiPrediction = "Error during AI prediction.";
-                System.err.println("Error during AI prediction: " + e.getMessage());
+                System.out.println("------------------------------------------");
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            aiPrediction = "Error during AI prediction.";
+            System.err.println("Error during AI prediction: " + e.getMessage());
         }
-        // --- END OF AI PREDICTION ---
+        // --- END OF UPDATED AI PREDICTION STEP ---
+
 
 
         Workout newWorkout = new Workout();
