@@ -584,6 +584,12 @@ No environment variables required all configuration is handled at runtime by `Ap
 
 ---
 
+## Author
+
+**Isuru Lakmal Peiris**
+GitHub: [@ilpeiris](https://github.com/ilpeiris)
+LinkedIn: [linkedin.com/in/ilpeiris](https://linkedin.com/in/ilpeiris)
+
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
