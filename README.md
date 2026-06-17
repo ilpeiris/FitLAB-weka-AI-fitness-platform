@@ -9,6 +9,13 @@
 ![License](https://img.shields.io/badge/License-GPL%20v3-blue?style=flat-square)
 ![Build](https://img.shields.io/badge/Build-WAR-blue?style=flat-square)
 
+<p align="center">
+  <img src="https://img.magnific.com/premium-photo/close-up-male-hands-using-creative-head-outline-cogs-ai-hologram-dark-blue-tech-background-artificial-intelligence-machine-learning-concept_670147-85711.jpg?semt=ais_hybrid&w=740&q=80"
+       alt="Banner"
+       width="900">
+</p>
+
+
 > A full-stack Java 17 web application featuring an end-to-end WEKA ML pipeline from custom dataset creation through multi-model training, evaluation, and serialized deployment with **dual AI integration**: a real-time JAX-RS REST inference API and a post-submission prediction comparison engine. Built on MVC + DAO architecture with jBCrypt authentication and a Chart.js analytics dashboard. Packaged as a deployable WAR artifact targeting Apache Tomcat 9.
 
 ---
